@@ -1,5 +1,5 @@
 {
-  "name": "Techship",
+  "name": "Elias",
   "version": "1.0.0",
   "description": "Testing",
   "main": "public/js/main.js",
@@ -10,7 +10,7 @@
     "clean": "rm -rf public/*"
   },
   "keywords": [
-    "Techship",
+    "Elias",
     "Testing"
   ],
   "author": "Techship",
@@ -19,6 +19,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.5",
     "babel-loader": "^8.2.5",
+    "browser-sync-webpack-plugin": "^2.3.0",
     "css-loader": "^6.7.1",
     "mini-css-extract-plugin": "^2.6.0",
     "postcss": "^8.4.12",

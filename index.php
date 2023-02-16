@@ -11,20 +11,24 @@ require_once "inc/functions.php";
 LoadString("dir");
 
 
-require_once "header.php";
+if ($dir === "fetch") {
+  require_once('fetch.php');
+} else {
+  require_once "header.php";
+  switch ($dir) {
+    case 'edit':
+    case 'register':
+      require_once(sprintf("pages/%s.php", $dir));
+      break;
 
-switch ($dir) {
-  case 'edit':
-  case 'create':
-    require_once(sprintf("pages/%s.php", $dir));
-    break;
+    default:
+      require_once("pages/index.php");
+      break;
+  }
 
-  default:
-    require_once("pages/weknowit.php");
-    break;
+  require_once "footer.php";
 }
 
-require_once "footer.php";
 
 
 

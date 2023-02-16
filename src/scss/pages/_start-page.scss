@@ -1,0 +1,26 @@
+#startPage {
+  .companies {
+    .body {
+      .list {
+        > li {
+          display: block;
+          text-decoration: none;
+          &:hover {
+            cursor: pointer;
+          }
+          svg {
+            height: 1em;
+            width: 1em;
+            color: black;
+            &:hover {
+              background-color: grey;
+            }
+
+          }
+          > span {
+          }
+        }
+      }
+    }
+  }
+}

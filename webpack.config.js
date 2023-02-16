@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -30,4 +31,8 @@ module.exports = {
     ]
   },
   devtool: 'source-map',
+  target: "web",
+  devServer: {
+    contentBase: "./public"
+  }
 };
