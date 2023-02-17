@@ -12,7 +12,7 @@ if ($action == "register") {
     "id" => "register",
     "name" => "",
     "address" => "",
-    "contact_person_id" => "",
+    "contact_persons_id" => "",
   ];
 } else if ($action == "edit") {
   $getInfo = $DB->prepare("SELECT * FROM companies where id = ? LIMIT 1");
@@ -29,7 +29,7 @@ if ($action == "register") {
   <form action="" id="<?php echo $info["id"]; ?>">
     <input type="text" placeholder="Name" name="name" value="<?php echo $info["name"]; ?>" required>
     <input type="text" placeholder="Address" name="address" value="<?php echo $info["address"]; ?>">
-    <section class="persons">
+    <section class="persons" data-persons="<?php echo $info['contact_persons_id']; ?>">
       <div class="head">
         <span>Persons</span>
       </div>

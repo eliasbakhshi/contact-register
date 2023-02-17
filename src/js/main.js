@@ -91,6 +91,9 @@ const getPersonsList = async (personsBox, noIcons = false) => {
     let data = await response.json();
     personsBox.innerHTML = "";
     if (data.info) {
+      let contactPersonsId = document.querySelector('section.persons').dataset.persons;
+      if (contactPersonsId) contactPersonsId.split(",");
+      let selected = "";
       data.info.map((person) => {
         if (!noIcons) {
           personsBox.innerHTML += `<li id=${person.id}>name: ${person.name} and address: ${person.title} and phone: ${person.phone}
@@ -98,7 +101,8 @@ const getPersonsList = async (personsBox, noIcons = false) => {
           <a href="/?page=person&action=edit&id=${person.id}">${editIcon}</a>
         </li>`;
         } else {
-          personsBox.innerHTML += `<li class="selectable" id=${person.id}>name: ${person.name} and address: ${person.title} and phone: ${person.phone}</li>`;
+          selected = (contactPersonsId.indexOf(String(person.id)) !== -1) ? "selected" : "";
+          personsBox.innerHTML += `<li class="selectable ${selected}" id=${person.id}>name: ${person.name} and address: ${person.title} and phone: ${person.phone}</li>`;
         }
       });
       // Make the persons selectable if needed
@@ -130,7 +134,7 @@ const getPersonsList = async (personsBox, noIcons = false) => {
  * Register a new company
  * @param {string} name - The name
  * @param {string} address - The address
- * @param {string} contactPersonsId - The connected person
+ * @param {string} contactPersonsId - The connected persons
  */
 const registerCompany = async (name, address, contactPersonsId) => {
   let url = "?page=fetch&action=registerCompany&name=" + name + "&address=" + address + "&contactPersonsId=" + contactPersonsId;
@@ -173,9 +177,10 @@ const registerPerson = async (name, title, phone) => {
  * @param {int} id - The ID
  * @param {string} name - The name
  * @param {string} address - The address
+ * @param {string} contactPersonsId - The connected persons
  */
-const updateCompany = async (id, name, address) => {
-  let url = "?page=fetch&action=updateCompany&id=" + id + "&name=" + name + "&address=" + address;
+const updateCompany = async (id, name, address, contactPersonsId) => {
+  let url = "?page=fetch&action=updateCompany&id=" + id + "&name=" + name + "&address=" + address + "&contactPersonsId=" + contactPersonsId;
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
@@ -239,37 +244,25 @@ if (main.id == "companyPage") {
   }
 
   // Register a company
-  if (companyForm.id === "register") {
-    companyForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      let name = e.target.querySelector('[name="name"]').value.trim();
-      let address = e.target.querySelector('[name="address"]').value.trim() || "";
-      let contactPersonsId = "";
-      let selectablePersons = e.target.querySelectorAll(".selectable.selected");
-      selectablePersons.forEach((selectPerson) => {
-        contactPersonsId += selectPerson.id + ",";
-      });
-
-      if (name !== "") {
-        registerCompany(name, address, contactPersonsId);
-      } else {
-        console.log("name is empty");
-      }
-    });
-  }
-
-  // Update a company's info
-  if (companyForm !== "register") {
+  if (companyForm) {
     companyForm.addEventListener("submit", (e) => {
       e.preventDefault();
       let id = Number(e.target.id);
       let name = e.target.querySelector('[name="name"]').value.trim();
       let address = e.target.querySelector('[name="address"]').value.trim() || "";
-      console.log(id, name, address);
-      if (name !== "") {
-        updateCompany(id, name, address);
-      } else {
-        console.log("name is empty");
+      let contactPersonsId = "";
+      let selectablePersons = e.target.querySelectorAll(".selectable.selected");
+      selectablePersons.forEach((selectPerson) => {
+        contactPersonsId += (selectPerson.id + ",");
+      });
+      // Remove extra comma at the start and at the end
+      contactPersonsId = contactPersonsId.replace(/,\s*$/, "");
+
+      if (name !== "" && companyForm.id === "register") {
+        registerCompany(name, address, contactPersonsId);
+      } else if (name !== "" && companyForm.id !== "register") {
+        console.log(id, name, address, contactPersonsId);
+        updateCompany(id, name, address, contactPersonsId);
       }
     });
   }
