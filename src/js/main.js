@@ -4,14 +4,53 @@ let main = document.querySelector("main");
 
 // --------- Functions ---------
 /**
- * Get all companies as list
+ * Delete a company
+ * @param {int} id - The id
+ * @param {string} container - The Box
  */
-const deleteCompany = async (companyBox) => {};
+const deleteCompany = async (id, container) => {
+  let url = "?page=fetch&action=deleteCompany&id=" + id;
+  let response = await fetch(url);
+  if (response.status === 200) {
+    let data = await response.json();
+    if (data.info) {
+      console.log("Deleted");
+      getCompaniesList(container);
+    } else {
+      console.log("Failed");
+    }
+  } else {
+    console.log("Something went wrong with the error code " + response.status);
+  }
+};
+
 /**
- * Get all companies as list
+ * Delete a person
+ * @param {int} id - The id
+ * @param {string} container - The Box
+ */
+const deletePerson = async (id, container) => {
+  let url = "?page=fetch&action=deletePerson&id=" + id;
+  let response = await fetch(url);
+  if (response.status === 200) {
+    let data = await response.json();
+    if (data.info) {
+      console.log("Deleted");
+      getPersonsList(container);
+    } else {
+      console.log("Failed");
+    }
+  } else {
+    console.log("Something went wrong with the error code " + response.status);
+  }
+};
+
+/**
+ * Get companies as a list
+ * @param {Element} companyBox - The id
  */
 const getCompaniesList = async (companyBox) => {
-  let url = "?dir=fetch&action=getCompaniesList";
+  let url = "?page=fetch&action=getCompaniesList";
   let response = await fetch(url);
 
   if (response.status === 200) {
@@ -21,15 +60,15 @@ const getCompaniesList = async (companyBox) => {
       data.info.map((company) => {
         companyBox.innerHTML += `<li id=${company.id}>name: ${company.name} and address: ${company.address}
                                   <span class="delete-company">${deleteIcon}</span>
-                                  <a href="/?dir=edit&type=company&id=${company.id}">${editIcon}</a>
+                                  <a href="/?page=company&action=edit&id=${company.id}">${editIcon}</a>
                                 </li>`;
       });
 
-      let deleteCompanies = Array.from( document.querySelectorAll(".delete-company"));
-      console.log(deleteCompanies);
+      // Add event listener fo deleting a company
+      let deleteCompanies = document.querySelectorAll(".delete-company");
       deleteCompanies.forEach((el) => {
-        el.addEventListener("click", (e) => {
-          console.log(e);
+        el.addEventListener("click", () => {
+          deleteCompany(el.parentElement.id, companyBox);
         });
       });
     } else {
@@ -41,18 +80,44 @@ const getCompaniesList = async (companyBox) => {
 };
 
 /**
- * Get all persons as list
+ * Get persons as a list
+ * @param {Element} companyBox - The id
+ * @param {boolean} noIcons - The Box
  */
-const getPersonsList = async (personsBox) => {
-  let url = "?dir=fetch&action=getPersonsList";
+const getPersonsList = async (personsBox, noIcons = false) => {
+  let url = "?page=fetch&action=getPersonsList";
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
     personsBox.innerHTML = "";
     if (data.info) {
       data.info.map((person) => {
-        personsBox.innerHTML += `<li id=${person.id}>name: ${person.name} and title: ${person.title} and phone: ${person.phone}</li>`;
+        if (!noIcons) {
+          personsBox.innerHTML += `<li id=${person.id}>name: ${person.name} and address: ${person.title} and phone: ${person.phone}
+          <span class="delete-person">${deleteIcon}</span>
+          <a href="/?page=person&action=edit&id=${person.id}">${editIcon}</a>
+        </li>`;
+        } else {
+          personsBox.innerHTML += `<li class="selectable" id=${person.id}>name: ${person.name} and address: ${person.title} and phone: ${person.phone}</li>`;
+        }
       });
+      // Make the persons selectable if needed
+      if (noIcons) {
+        let selectablePersons = personsBox.querySelectorAll(".selectable");
+        selectablePersons.forEach((selectPerson) => {
+          selectPerson.addEventListener("click", (e) => {
+            e.target.classList.toggle("selected");
+          });
+        });
+      } else {
+        // Make persons deletable
+        let deleteCompanies = document.querySelectorAll(".delete-person");
+        deleteCompanies.forEach((el) => {
+          el.addEventListener("click", () => {
+            deletePerson(el.parentElement.id, personsBox);
+          });
+        });
+      }
     } else {
       personsBox.innerHTML = "<li>There is no person to show.</li>";
     }
@@ -65,9 +130,10 @@ const getPersonsList = async (personsBox) => {
  * Register a new company
  * @param {string} name - The name
  * @param {string} address - The address
+ * @param {string} contactPersonsId - The connected person
  */
-const registerCompany = async (name, address) => {
-  let url = "?dir=fetch&action=registerCompany&name=" + name + "&address=" + address;
+const registerCompany = async (name, address, contactPersonsId) => {
+  let url = "?page=fetch&action=registerCompany&name=" + name + "&address=" + address + "&contactPersonsId=" + contactPersonsId;
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
@@ -88,7 +154,7 @@ const registerCompany = async (name, address) => {
  * @param {string} phone - The phone
  */
 const registerPerson = async (name, title, phone) => {
-  let url = "?dir=fetch&action=registerPerson&name=" + name + "&title=" + title + "&phone=" + phone;
+  let url = "?page=fetch&action=registerPerson&name=" + name + "&title=" + title + "&phone=" + phone;
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
@@ -109,7 +175,7 @@ const registerPerson = async (name, title, phone) => {
  * @param {string} address - The address
  */
 const updateCompany = async (id, name, address) => {
-  let url = "?dir=fetch&action=updateCompany&id=" + id + "&name=" + name + "&address=" + address;
+  let url = "?page=fetch&action=updateCompany&id=" + id + "&name=" + name + "&address=" + address;
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
@@ -131,7 +197,7 @@ const updateCompany = async (id, name, address) => {
  * @param {string} phone - The phone
  */
 const updatePerson = async (id, name, title, phone) => {
-  let url = "?dir=fetch&action=updatePerson&id=" + id + "&name=" + name + "&title=" + title + "&phone=" + phone;
+  let url = "?page=fetch&action=updatePerson&id=" + id + "&name=" + name + "&title=" + title + "&phone=" + phone;
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
@@ -162,50 +228,38 @@ if (main.id == "startPage") {
   }
 }
 
-// --------- Create page
-if (main.id == "createPage") {
+// --------- Company page
+if (main.id == "companyPage") {
   let companyForm = document.querySelector(".company form");
-  let personForm = document.querySelector(".person form");
+  let personsBox = document.querySelector(".persons .body .list");
 
-  // Functions
+  // Show persons in the form
+  if (personsBox) {
+    getPersonsList(personsBox, true);
+  }
 
   // Register a company
-  if (companyForm) {
+  if (companyForm.id === "register") {
     companyForm.addEventListener("submit", (e) => {
       e.preventDefault();
       let name = e.target.querySelector('[name="name"]').value.trim();
       let address = e.target.querySelector('[name="address"]').value.trim() || "";
+      let contactPersonsId = "";
+      let selectablePersons = e.target.querySelectorAll(".selectable.selected");
+      selectablePersons.forEach((selectPerson) => {
+        contactPersonsId += selectPerson.id + ",";
+      });
+
       if (name !== "") {
-        registerCompany(name, address);
+        registerCompany(name, address, contactPersonsId);
       } else {
         console.log("name is empty");
       }
     });
   }
-
-  // Register a person
-  if (personForm) {
-    personForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      let name = e.target.querySelector('[name="name"]').value.trim();
-      let address = e.target.querySelector('[name="title"]').value.trim() || "";
-      let phone = e.target.querySelector('[name="phone"]').value.trim() || "";
-      if (name !== "") {
-        registerPerson(name, address, phone);
-      } else {
-        console.log("name is empty");
-      }
-    });
-  }
-}
-
-// --------- Edit page
-if (main.id == "editPage") {
-  let companyForm = document.querySelector(".company form");
-  let personForm = document.querySelector(".person form");
 
   // Update a company's info
-  if (companyForm) {
+  if (companyForm !== "register") {
     companyForm.addEventListener("submit", (e) => {
       e.preventDefault();
       let id = Number(e.target.id);
@@ -219,9 +273,29 @@ if (main.id == "editPage") {
       }
     });
   }
+}
+
+// --------- Person page
+if (main.id == "personPage") {
+  let personForm = document.querySelector(".person form");
+
+  // Register a person
+  if (personForm.id === "register") {
+    personForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let name = e.target.querySelector('[name="name"]').value.trim();
+      let address = e.target.querySelector('[name="title"]').value.trim() || "";
+      let phone = e.target.querySelector('[name="phone"]').value.trim() || "";
+      if (name !== "") {
+        registerPerson(name, address, phone);
+      } else {
+        console.log("name is empty");
+      }
+    });
+  }
 
   // Update a person's info
-  if (personForm) {
+  if (personForm.id !== "register") {
     personForm.addEventListener("submit", (e) => {
       e.preventDefault();
       let id = Number(e.target.id);

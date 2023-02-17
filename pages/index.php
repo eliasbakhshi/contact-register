@@ -6,7 +6,7 @@ if (!defined('ALLOWED')) die('Permission denied');
   <section class="companies">
     <div class="head">
       <span>Companies</span>
-      <a href="/?dir=register&type=company">New</a>
+      <a href="/?page=company&action=register">New</a>
     </div>
     <div class="body">
       <ul class="list">
@@ -17,7 +17,7 @@ if (!defined('ALLOWED')) die('Permission denied');
   <section class="persons">
     <div class="head">
       <span>Persons</span>
-      <a href="/?dir=register&type=person">New</a>
+      <a href="/?page=person&action=register">New</a>
     </div>
     <div class="body">
       <ul class="list">

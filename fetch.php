@@ -32,14 +32,27 @@ switch ($action) {
     }
     break;
 
+  case 'deleteCompany':
+    LoadInt("id");
+    $getInfo = $DB->prepare("DELETE FROM companies WHERE id = ?");
+    $response["info"] = $getInfo->execute(array($id));
+    break;
+
+  case 'deletePerson':
+    LoadInt("id");
+    $getInfo = $DB->prepare("DELETE  FROM persons WHERE id = ?");
+    $response["info"] = $getInfo->execute(array($id));
+    break;
+
 
     // Register page
   case 'registerCompany':
     LoadString("name");
     LoadString("address");
+    LoadString("contactPersonsId");
 
-    $getInfo = $DB->prepare("INSERT INTO companies (`name`, `address`) VALUES (?, ?)");
-    $response["info"] = $getInfo->execute(array($name, $address));
+    $getInfo = $DB->prepare("INSERT INTO companies (`name`, `address`, `contact_persons_id`) VALUES (?, ?, ?)");
+    $response["info"] = $getInfo->execute(array($name, $address, $contactPersonsId));
     break;
 
   case 'registerPerson':
@@ -56,9 +69,10 @@ switch ($action) {
     LoadInt("id");
     LoadString("name");
     LoadString("address");
+    LoadString("contactPersonsId");
 
-    $getInfo = $DB->prepare("UPDATE companies SET name = ?, address = ? where id = ?");
-    $response["info"] = $getInfo->execute(array($name, $address, $id));
+    $getInfo = $DB->prepare("UPDATE companies SET name = ?, address = ?, contact_persons_id = ? where id = ?");
+    $response["info"] = $getInfo->execute(array($name, $address, $contactPersonsId,  $id));
     break;
 
   case 'updatePerson':

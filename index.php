@@ -8,17 +8,17 @@ define("ALLOWED", true);
 require_once "inc/db.php";
 require_once "inc/functions.php";
 
-LoadString("dir");
+LoadString("page");
 
 
-if ($dir === "fetch") {
+if ($page === "fetch") {
   require_once('fetch.php');
 } else {
   require_once "header.php";
-  switch ($dir) {
-    case 'edit':
-    case 'register':
-      require_once(sprintf("pages/%s.php", $dir));
+  switch ($page) {
+    case 'company':
+    case 'person':
+      require_once(sprintf("pages/%s.php", $page));
       break;
 
     default:
