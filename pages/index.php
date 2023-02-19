@@ -2,7 +2,7 @@
 if (!defined('ALLOWED')) die('Permission denied');
 ?>
 
-<main id="startPage">
+<main id="startPage" class="container">
   <section class="companies">
     <div class="head">
       <span>Companies</span>

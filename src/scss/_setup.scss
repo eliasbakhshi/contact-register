@@ -1,0 +1,60 @@
+/* Chrome, safari */
+body {
+  display: flex;
+  justify-content: center;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: $radius;
+}
+
+/* Firefox */
+.selector {
+  scrollbar-width: thin;
+}
+
+.container {
+  width: 100% !important;
+  padding: 0 1rem;
+  margin: 0 1rem;
+
+  // for $ screens
+  @media only screen and (min-width: $sm) {
+    width: 1024px !important;
+    overflow: hidden;
+    padding: 0 1rem;
+  }
+
+  // for md screens
+  @media only screen and (min-width: $md) {
+    width: 1024px !important;
+    overflow: hidden;
+    padding: 0 1rem;
+  }
+
+  // for L screens
+  @media only screen and (min-width: $l) {
+    width: 1024px !important;
+    overflow: hidden;
+    padding: 0 1rem;
+  }
+
+  // for XL screens
+  @media only screen and (min-width: $xl) {
+    width: 1140px !important;
+    overflow: hidden;
+    padding: 0 1rem;
+  }
+
+  // for XXL screens
+  @media only screen and (min-width: $xxl) {
+    width: 1320px !important;
+    overflow: hidden;
+    padding: 0 1rem;
+  }
+}

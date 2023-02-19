@@ -4,7 +4,7 @@ if (!defined('ALLOWED')) die('Permission denied');
 LoadString("action");
 LoadInt("id");
 
-printf('<main id="personPage">');
+printf('<main id="personPage" class="container">');
 
 $info = [];
 if ($action == "register") {
@@ -28,6 +28,7 @@ if ($action == "register") {
 
 <section class="person">
   <form action="" id="<?php echo $info["id"]; ?>">
+    <p class="message"></p>
     <input type="text" placeholder="Name" name="name" value="<?php echo $info["name"]; ?>" required>
     <input type="text" placeholder="Title" name="title" value="<?php echo $info["title"]; ?>">
     <input type="text" placeholder="Phone" name="phone" value="<?php echo $info["phone"]; ?>">

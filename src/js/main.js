@@ -58,10 +58,19 @@ const getCompaniesList = async (companyBox) => {
     companyBox.innerHTML = "";
     if (data.info) {
       data.info.map((company) => {
-        companyBox.innerHTML += `<li id=${company.id}>name: ${company.name} and address: ${company.address}
-                                  <span class="delete-company">${deleteIcon}</span>
-                                  <a href="/?page=company&action=edit&id=${company.id}">${editIcon}</a>
-                                </li>`;
+        console.log(company);
+        companyBox.innerHTML += `<li id=${company.id}>
+                                    <div class="company-logo"></div>
+                                    <div class="info">
+                                      <span class="name">${company.name}</span>
+                                      <span class="title"><br> ${company.address}</span>
+                                      <span class="contact-person"><br>${userIcon}<a href="tel:"${company.address}">${company.address}</a></span>
+                                    </div>
+                                    <div class="actions">
+                                    <a class="edit" href="/?page=company&action=edit&id=${company.id}">${editIcon}</a>
+                                    <span class="delete delete-company">${deleteIcon}</span>
+                                    </div>
+                                  </li>`;
       });
 
       // Add event listener fo deleting a company
@@ -91,18 +100,31 @@ const getPersonsList = async (personsBox, noIcons = false) => {
     let data = await response.json();
     personsBox.innerHTML = "";
     if (data.info) {
-      let contactPersonsId = document.querySelector('section.persons').dataset.persons;
+      let contactPersonsId = document.querySelector("section.persons").dataset.persons;
       if (contactPersonsId) contactPersonsId.split(",");
       let selected = "";
       data.info.map((person) => {
         if (!noIcons) {
-          personsBox.innerHTML += `<li id=${person.id}>name: ${person.name} and address: ${person.title} and phone: ${person.phone}
-          <span class="delete-person">${deleteIcon}</span>
-          <a href="/?page=person&action=edit&id=${person.id}">${editIcon}</a>
-        </li>`;
+          personsBox.innerHTML += `<li id=${person.id}>
+                                    <div class="avatar"></div>
+                                    <div class="info">
+                                      <span class="name">${person.name}</span>
+                                      <span class="title"><br> ${person.title}</span>
+                                    </div>
+                                    <div class="actions">
+                                    <a class="edit" href="/?page=person&action=edit&id=${person.id}">${editIcon}</a>
+                                    <span class="delete delete-person">${deleteIcon}</span>
+                                    </div>
+                                  </li>`;
         } else {
-          selected = (contactPersonsId.indexOf(String(person.id)) !== -1) ? "selected" : "";
-          personsBox.innerHTML += `<li class="selectable ${selected}" id=${person.id}>name: ${person.name} and address: ${person.title} and phone: ${person.phone}</li>`;
+          selected = contactPersonsId.indexOf(String(person.id)) !== -1 ? "selected" : "";
+          personsBox.innerHTML += `<li class="selectable ${selected}" id=${person.id}>
+                                    <div class="avatar"></div>
+                                    <div class="info">
+                                      <span class="name">${person.name}</span>
+                                      <span class="title"><br> ${person.title}</span>
+                                    </div>
+                                  </li>`;
         }
       });
       // Make the persons selectable if needed
@@ -110,7 +132,9 @@ const getPersonsList = async (personsBox, noIcons = false) => {
         let selectablePersons = personsBox.querySelectorAll(".selectable");
         selectablePersons.forEach((selectPerson) => {
           selectPerson.addEventListener("click", (e) => {
-            e.target.classList.toggle("selected");
+            if( selectPerson.contains(e.target) ) {
+              selectPerson.classList.toggle("selected");
+            }
           });
         });
       } else {
@@ -184,10 +208,12 @@ const updateCompany = async (id, name, address, contactPersonsId) => {
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
+    let message = document.querySelector(".message");
+    message.style.display = "block";
     if (data.info) {
-      console.log("Updated");
+      message.innerHTML = "Updated";
     } else {
-      console.log("Failed");
+      message.innerHTML = "Failed";
     }
   } else {
     console.log("Something went wrong with the error code " + response.status);
@@ -253,13 +279,14 @@ if (main.id == "companyPage") {
       let contactPersonsId = "";
       let selectablePersons = e.target.querySelectorAll(".selectable.selected");
       selectablePersons.forEach((selectPerson) => {
-        contactPersonsId += (selectPerson.id + ",");
+        contactPersonsId += selectPerson.id + ",";
       });
       // Remove extra comma at the start and at the end
       contactPersonsId = contactPersonsId.replace(/,\s*$/, "");
 
       if (name !== "" && companyForm.id === "register") {
         registerCompany(name, address, contactPersonsId);
+        e.target.reset();
       } else if (name !== "" && companyForm.id !== "register") {
         console.log(id, name, address, contactPersonsId);
         updateCompany(id, name, address, contactPersonsId);
@@ -273,33 +300,37 @@ if (main.id == "personPage") {
   let personForm = document.querySelector(".person form");
 
   // Register a person
-  if (personForm.id === "register") {
-    personForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      let name = e.target.querySelector('[name="name"]').value.trim();
-      let address = e.target.querySelector('[name="title"]').value.trim() || "";
-      let phone = e.target.querySelector('[name="phone"]').value.trim() || "";
-      if (name !== "") {
-        registerPerson(name, address, phone);
-      } else {
-        console.log("name is empty");
-      }
-    });
-  }
-
-  // Update a person's info
-  if (personForm.id !== "register") {
+  if (personForm) {
     personForm.addEventListener("submit", (e) => {
       e.preventDefault();
       let id = Number(e.target.id);
       let name = e.target.querySelector('[name="name"]').value.trim();
       let title = e.target.querySelector('[name="title"]').value.trim() || "";
+      let address = e.target.querySelector('[name="title"]').value.trim() || "";
       let phone = e.target.querySelector('[name="phone"]').value.trim() || "";
-      if (name !== "") {
+      if (name !== "" && personForm.id === "register") {
+        registerPerson(name, address, phone);
+        e.target.reset();
+      } else if (name !== "" && personForm.id !== "register") {
         updatePerson(id, name, title, phone);
-      } else {
-        console.log("name is empty");
       }
     });
   }
+
+  // Update a person's info
+  // if (personForm.id !== "register") {
+  //   personForm.addEventListener("submit", (e) => {
+  //     e.preventDefault();
+  //     let id = Number(e.target.id);
+  //     let name = e.target.querySelector('[name="name"]').value.trim();
+  //     let title = e.target.querySelector('[name="title"]').value.trim() || "";
+  //     let phone = e.target.querySelector('[name="phone"]').value.trim() || "";
+  //     if (name !== "") {
+  //       updatePerson(id, name, title, phone);
+  //     } else {
+  //       console.log("name is empty");
+  //     }
+  //     e.target.reset();
+  //   });
+  // }
 }
