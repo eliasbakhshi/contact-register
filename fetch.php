@@ -14,8 +14,8 @@ switch ($action) {
     // Start page
   case 'getCompaniesList':
     LoadString("search");
-    $getInfo = $DB->prepare("SELECT * FROM companies WHERE name LIKE '%$search%'");
-    $getInfo->execute();
+    $getInfo = $DB->prepare("SELECT * FROM companies WHERE name LIKE ?");
+    $getInfo->execute(["%".$search."%"]);
 
     if ($getInfo->rowCount()) {
       $companiesInfo = $getInfo->fetchAll();
@@ -38,8 +38,8 @@ switch ($action) {
 
   case 'getPersonsList':
     LoadString("search");
-    $getInfo = $DB->prepare("SELECT * FROM persons WHERE name LIKE '%$search%'");
-    $getInfo->execute();
+    $getInfo = $DB->prepare("SELECT * FROM persons WHERE name LIKE ?");
+    $getInfo->execute(["%".$search."%"]);
 
     if ($getInfo->rowCount()) {
       $companiesInfo = $getInfo->fetchAll();

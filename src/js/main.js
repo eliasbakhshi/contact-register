@@ -251,10 +251,10 @@ const updatePerson = async (id, name, title, phone) => {
 
 /**
  * Update a person's info
- * @param {event} e - The event in the addEventListener
+ * @param {event} el - The element that has the list
+ * @param {event} event - The event in the addEventListener
  */
 const searchUpdatesList = async (el, event) => {
-  console.log(el);
   if (event.target.id === "searchCompany") {
     getCompaniesList(el, event.target.value);
   } else if (event.target.id === "searchPerson") {
@@ -270,6 +270,7 @@ if (main.id == "startPage") {
   let searchCompany = document.getElementById("searchCompany");
   let searchPerson = document.getElementById("searchPerson");
 
+  // Update the list according to the searched word.
   searchCompany.addEventListener("input", searchUpdatesList.bind(null, companyBox));
   searchPerson.addEventListener("input", searchUpdatesList.bind(null, personsBox));
 
@@ -313,7 +314,6 @@ if (main.id == "companyPage") {
         registerCompany(name, address, contactPersonsId);
         e.target.reset();
       } else if (name !== "" && companyForm.id !== "register") {
-        console.log(id, name, address, contactPersonsId);
         updateCompany(id, name, address, contactPersonsId);
       }
     });
@@ -341,21 +341,4 @@ if (main.id == "personPage") {
       }
     });
   }
-
-  // Update a person's info
-  // if (personForm.id !== "register") {
-  //   personForm.addEventListener("submit", (e) => {
-  //     e.preventDefault();
-  //     let id = Number(e.target.id);
-  //     let name = e.target.querySelector('[name="name"]').value.trim();
-  //     let title = e.target.querySelector('[name="title"]').value.trim() || "";
-  //     let phone = e.target.querySelector('[name="phone"]').value.trim() || "";
-  //     if (name !== "") {
-  //       updatePerson(id, name, title, phone);
-  //     } else {
-  //       console.log("name is empty");
-  //     }
-  //     e.target.reset();
-  //   });
-  // }
 }
