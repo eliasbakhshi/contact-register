@@ -48,17 +48,21 @@ const deletePerson = async (id, container) => {
 /**
  * Get companies as a list
  * @param {Element} companyBox - The id
+ * @param {string}  search - The searched word
  */
-const getCompaniesList = async (companyBox) => {
-  let url = "?page=fetch&action=getCompaniesList";
+const getCompaniesList = async (companyBox, search = "") => {
+  companyBox.classList.add("loading");
+  let url = "?page=fetch&action=getCompaniesList&search=" + search;
   let response = await fetch(url);
 
   if (response.status === 200) {
     let data = await response.json();
     companyBox.innerHTML = "";
+    companyBox.classList.remove("loading");
+
     if (data.info) {
       data.info.map((company) => {
-        let contactPersonExists = (company.contactPerson) ? `<span class="contact-person">${phoneIcon}<a href="tel:${company.contactPersonPhone}">${company.contactPerson}</a></span>` : '';
+        let contactPersonExists = company.contactPerson ? `<span class="contact-person">${phoneIcon}<a href="tel:${company.contactPersonPhone}">${company.contactPerson}</a></span>` : "";
         companyBox.innerHTML += `<li id=${company.id}>
                                     <div class="company-logo"></div>
                                     <div class="info">
@@ -92,13 +96,16 @@ const getCompaniesList = async (companyBox) => {
  * Get persons as a list
  * @param {Element} companyBox - The id
  * @param {boolean} noIcons - The Box
+ * @param {string}  search - The searched word
  */
-const getPersonsList = async (personsBox, noIcons = false) => {
-  let url = "?page=fetch&action=getPersonsList";
+const getPersonsList = async (personsBox, noIcons = false, search = "") => {
+  personsBox.classList.add("loading");
+  let url = "?page=fetch&action=getPersonsList&search=" + search;
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
     personsBox.innerHTML = "";
+    personsBox.classList.remove("loading");
     if (data.info) {
       let contactPersonsId = document.querySelector("section.persons").dataset.persons;
       if (contactPersonsId) contactPersonsId.split(",");
@@ -132,7 +139,7 @@ const getPersonsList = async (personsBox, noIcons = false) => {
         let selectablePersons = personsBox.querySelectorAll(".selectable");
         selectablePersons.forEach((selectPerson) => {
           selectPerson.addEventListener("click", (e) => {
-            if( selectPerson.contains(e.target) ) {
+            if (selectPerson.contains(e.target)) {
               selectPerson.classList.toggle("selected");
             }
           });
@@ -242,17 +249,30 @@ const updatePerson = async (id, name, title, phone) => {
   }
 };
 
+/**
+ * Update a person's info
+ * @param {event} e - The event in the addEventListener
+ */
+const searchUpdatesList = async (el, event) => {
+  console.log(el);
+  if (event.target.id === "searchCompany") {
+    getCompaniesList(el, event.target.value);
+  } else if (event.target.id === "searchPerson") {
+    getPersonsList(el, false, event.target.value);
+  }
+};
+
 // --------- Script ---------
 // --------- Start page
 if (main.id == "startPage") {
   let companyBox = document.querySelector(".companies .body .list");
   let personsBox = document.querySelector(".persons .body .list");
-  let searchBoxes = document.querySelectorAll('input[type="search"]')
+  let searchCompany = document.getElementById("searchCompany");
+  let searchPerson = document.getElementById("searchPerson");
 
-  searchBoxes.forEach((e) => {
-    console.log(typeof e);
-    e.setAttribute('size',e.target.getAttribute('placeholder').length);
-  })
+  searchCompany.addEventListener("input", searchUpdatesList.bind(null, companyBox));
+  searchPerson.addEventListener("input", searchUpdatesList.bind(null, personsBox));
+
   // Show companies in the box
   if (companyBox) {
     getCompaniesList(companyBox);

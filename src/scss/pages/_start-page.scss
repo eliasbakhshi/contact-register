@@ -53,6 +53,9 @@
         background-color: $main-color;
         padding: 0.5em 0;
         width: 100%;
+        &.loading {
+          opacity: .5;
+        }
         > li {
           padding: 1em 0;
           margin: 0.5em 1em;

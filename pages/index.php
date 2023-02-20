@@ -9,7 +9,7 @@ if (!defined('ALLOWED')) die('Permission denied');
       <a href="/?page=company&action=register">New</a>
     </div>
     <div class="body">
-    <input type="search" placeholder="Search" />
+    <input type="search" id="searchCompany" value="" placeholder="Search" />
       <ul class="list">
         <li>Loading ...</li>
       </ul>
@@ -21,7 +21,7 @@ if (!defined('ALLOWED')) die('Permission denied');
       <a href="/?page=person&action=register">New</a>
     </div>
     <div class="body">
-    <input type="search" placeholder="Search" />
+    <input type="search" id="searchPerson" value="" placeholder="Search" />
       <ul class="list">
         <li>Loading ...</li>
       </ul>
