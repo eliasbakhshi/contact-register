@@ -17,8 +17,21 @@ switch ($action) {
     $getInfo->execute();
 
     if ($getInfo->rowCount()) {
-      $driversInfo = $getInfo->fetchAll();
-      $response["info"] = $driversInfo;
+      $companiesInfo = $getInfo->fetchAll();
+      foreach ($companiesInfo as $key => $companyInfo) {
+        if ($companyInfo["contact_persons_id"] !== "") {
+          $contactPersonsId = explode(",", $companyInfo["contact_persons_id"] ?? "");
+          unset($companiesInfo[$key]["contact_persons_id"]);
+          $getInfo = $DB->prepare("SELECT name, phone FROM persons where id = ?");
+          $getInfo->execute(array($contactPersonsId[0]));
+          if ($getInfo->rowCount()) {
+            $personInfo = $getInfo->fetch();
+            $companiesInfo[$key]['contactPerson'] = $personInfo['name'];
+            $companiesInfo[$key]['contactPersonPhone'] = $personInfo['phone'];
+          }
+        }
+      }
+      $response["info"] = $companiesInfo;
     }
     break;
 
@@ -27,8 +40,8 @@ switch ($action) {
     $getInfo->execute();
 
     if ($getInfo->rowCount()) {
-      $driversInfo = $getInfo->fetchAll();
-      $response["info"] = $driversInfo;
+      $companiesInfo = $getInfo->fetchAll();
+      $response["info"] = $companiesInfo;
     }
     break;
 

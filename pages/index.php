@@ -3,12 +3,13 @@ if (!defined('ALLOWED')) die('Permission denied');
 ?>
 
 <main id="startPage" class="container">
-  <section class="companies">
+  <section class="companies" size=5>
     <div class="head">
       <span>Companies</span>
       <a href="/?page=company&action=register">New</a>
     </div>
     <div class="body">
+    <input type="search" placeholder="Search" />
       <ul class="list">
         <li>Loading ...</li>
       </ul>
@@ -20,6 +21,7 @@ if (!defined('ALLOWED')) die('Permission denied');
       <a href="/?page=person&action=register">New</a>
     </div>
     <div class="body">
+    <input type="search" placeholder="Search" />
       <ul class="list">
         <li>Loading ...</li>
       </ul>

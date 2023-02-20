@@ -58,13 +58,13 @@ const getCompaniesList = async (companyBox) => {
     companyBox.innerHTML = "";
     if (data.info) {
       data.info.map((company) => {
-        console.log(company);
+        let contactPersonExists = (company.contactPerson) ? `<span class="contact-person">${phoneIcon}<a href="tel:${company.contactPersonPhone}">${company.contactPerson}</a></span>` : '';
         companyBox.innerHTML += `<li id=${company.id}>
                                     <div class="company-logo"></div>
                                     <div class="info">
                                       <span class="name">${company.name}</span>
-                                      <span class="title"><br> ${company.address}</span>
-                                      <span class="contact-person"><br>${userIcon}<a href="tel:"${company.address}">${company.address}</a></span>
+                                      <br><span class="title"> ${addressIcon}${company.address}</span>
+                                      ${contactPersonExists}
                                     </div>
                                     <div class="actions">
                                     <a class="edit" href="/?page=company&action=edit&id=${company.id}">${editIcon}</a>
@@ -109,7 +109,7 @@ const getPersonsList = async (personsBox, noIcons = false) => {
                                     <div class="avatar"></div>
                                     <div class="info">
                                       <span class="name">${person.name}</span>
-                                      <span class="title"><br> ${person.title}</span>
+                                      <br><span class="title"> ${person.title}</span>
                                     </div>
                                     <div class="actions">
                                     <a class="edit" href="/?page=person&action=edit&id=${person.id}">${editIcon}</a>
@@ -122,7 +122,7 @@ const getPersonsList = async (personsBox, noIcons = false) => {
                                     <div class="avatar"></div>
                                     <div class="info">
                                       <span class="name">${person.name}</span>
-                                      <span class="title"><br> ${person.title}</span>
+                                      <br><span class="title">${person.title}</span>
                                     </div>
                                   </li>`;
         }
@@ -247,7 +247,12 @@ const updatePerson = async (id, name, title, phone) => {
 if (main.id == "startPage") {
   let companyBox = document.querySelector(".companies .body .list");
   let personsBox = document.querySelector(".persons .body .list");
+  let searchBoxes = document.querySelectorAll('input[type="search"]')
 
+  searchBoxes.forEach((e) => {
+    console.log(typeof e);
+    e.setAttribute('size',e.target.getAttribute('placeholder').length);
+  })
   // Show companies in the box
   if (companyBox) {
     getCompaniesList(companyBox);
