@@ -27,7 +27,7 @@ We suggest that the contact register consists of three pages and a simple search
 1. Start page: List of companies and contact persons
 2. Create/edit/delete companies.
 3. Create/edit/delete contact person.
-4. Search for company and/or contact person. Bonus task (search field + free text search)
+4. Search for company and/or contact person.
 
 # Requirement:
 List companies with associated one or more contact persons. The list may be loaded asynchronously, but it is not an absolute requirement. You must be able to create and edit companies.

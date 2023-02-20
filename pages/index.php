@@ -27,5 +27,4 @@ if (!defined('ALLOWED')) die('Permission denied');
       </ul>
     </div>
   </section>
-
 </main>

@@ -1,8 +1,29 @@
 "use strict";
 
 let main = document.querySelector("main");
+let overlay = document.getElementById("overlay");
 
 // --------- Functions ---------
+/**
+ * Close the overlay but clicking outside of the message box
+ */
+const overlayHide = () => {
+  if (overlay.classList.contains("show")) {
+    overlay.classList.remove("show");
+    overlay.removeEventListener("click", overlayHide);
+  }
+};
+
+/**
+ * Open the overlay but clicking outside of the message box
+ */
+const overlayShow = () => {
+  if (!overlay.classList.contains("show")) {
+    overlay.classList.add("show");
+    overlay.addEventListener("click", overlayHide);
+  }
+};
+
 /**
  * Delete a company
  * @param {int} id - The id
@@ -10,6 +31,7 @@ let main = document.querySelector("main");
  */
 const deleteCompany = async (id, container) => {
   let url = "?page=fetch&action=deleteCompany&id=" + id;
+  console.log(url);
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
@@ -71,8 +93,8 @@ const getCompaniesList = async (companyBox, search = "") => {
                                       ${contactPersonExists}
                                     </div>
                                     <div class="actions">
-                                    <a class="edit" href="/?page=company&action=edit&id=${company.id}">${editIcon}</a>
-                                    <span class="delete delete-company">${deleteIcon}</span>
+                                      <a class="edit" href="/?page=company&action=edit&id=${company.id}">${editIcon}</a>
+                                      <span class="delete delete-company" id="${company.id}">${deleteIcon}</span>
                                     </div>
                                   </li>`;
       });
@@ -81,7 +103,28 @@ const getCompaniesList = async (companyBox, search = "") => {
       let deleteCompanies = document.querySelectorAll(".delete-company");
       deleteCompanies.forEach((el) => {
         el.addEventListener("click", () => {
-          deleteCompany(el.parentElement.id, companyBox);
+          overlayShow();
+          overlay.innerHTML = `<div class="message-box">
+                                <div class="head">
+                                  Deleting company
+                                </div>
+                                <div class="body">
+                                Do you want to remove the company?
+                                </div>
+                                <div class="footer">
+                                  <button id="yes">yes</button>
+                                  <button id="no">no</button>
+                                </div>
+                              </div>`;
+          let messageBtns = overlay.querySelectorAll("button");
+          messageBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+              if (btn.id === "yes") {
+                deleteCompany(el.id, companyBox);
+              }
+              overlayHide();
+            });
+          });
         });
       });
     } else {
@@ -120,7 +163,7 @@ const getPersonsList = async (personsBox, noIcons = false, search = "") => {
                                     </div>
                                     <div class="actions">
                                     <a class="edit" href="/?page=person&action=edit&id=${person.id}">${editIcon}</a>
-                                    <span class="delete delete-person">${deleteIcon}</span>
+                                    <span class="delete delete-person" id="${person.id}">${deleteIcon}</span>
                                     </div>
                                   </li>`;
         } else {
@@ -149,7 +192,28 @@ const getPersonsList = async (personsBox, noIcons = false, search = "") => {
         let deleteCompanies = document.querySelectorAll(".delete-person");
         deleteCompanies.forEach((el) => {
           el.addEventListener("click", () => {
-            deletePerson(el.parentElement.id, personsBox);
+            overlayShow();
+            overlay.innerHTML = `<div class="message-box">
+                                <div class="head">
+                                  Deleting person
+                                </div>
+                                <div class="body">
+                                Do you want to remove the person?
+                                </div>
+                                <div class="footer">
+                                  <button id="yes">yes</button>
+                                  <button id="no">no</button>
+                                </div>
+                              </div>`;
+            let messageBtns = overlay.querySelectorAll("button");
+            messageBtns.forEach((btn) => {
+              btn.addEventListener("click", () => {
+                if (btn.id === "yes") {
+                  deletePerson(el.id, personsBox);
+                }
+                overlayHide();
+              });
+            });
           });
         });
       }
@@ -239,10 +303,12 @@ const updatePerson = async (id, name, title, phone) => {
   let response = await fetch(url);
   if (response.status === 200) {
     let data = await response.json();
+    let message = document.querySelector(".message");
+    message.style.display = "block";
     if (data.info) {
-      console.log("Updated");
+      message.innerHTML = "Updated";
     } else {
-      console.log("Failed");
+      message.innerHTML = "Failed";
     }
   } else {
     console.log("Something went wrong with the error code " + response.status);

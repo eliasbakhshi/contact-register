@@ -58,3 +58,57 @@ body {
     padding: 0 1rem;
   }
 }
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  &.show {
+    display: flex;
+  }
+}
+
+.message-box {
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  margin: 2em 0;
+  border-radius: $radius;
+  .head {
+    padding: 1em 1em;
+    background-color: $secondary-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  }
+  .body {
+    padding: 1em 1em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: $main-color;
+  }
+  .footer {
+    background-color: $main-color;
+    padding: 1em 1em;
+    text-align: right;
+    > button {
+      padding: 0.5em 1em;
+      border-radius: $radius;
+      background-color: $link-color;
+      margin-left: 1em;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+  @media only screen and (min-width: $sm) {
+    width: 25em;
+  }
+}

@@ -13,4 +13,5 @@ if (!defined('ALLOWED')) die('Permission denied');
   <script src="/public/js/main.js" defer></script>
 </head>
 <body>
+  <div id="overlay"></div>
 <?php
