@@ -32,8 +32,8 @@ if ($action == "register") {
     <input type="text" placeholder="Name" name="name" value="<?php echo $info["name"]; ?>" required>
     <input type="text" placeholder="Title" name="title" value="<?php echo $info["title"]; ?>">
     <input type="text" placeholder="Phone" name="phone" value="<?php echo $info["phone"]; ?>">
-    <button>Save</button>
-    <a href="/">Back</a>
+    <button class="btn">Save</button>
+    <a class="btn" href="/">Back</a>
   </form>
 </section>
 </main>

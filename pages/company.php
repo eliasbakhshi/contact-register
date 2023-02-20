@@ -28,7 +28,6 @@ if ($action == "register") {
 <section class="company">
   <form action="" id="<?php echo $info["id"]; ?>">
     <p class="message"></p>
-
     <input type="text" placeholder="Name" name="name" value="<?php echo $info["name"]; ?>" required>
     <input type="text" placeholder="Address" name="address" value="<?php echo $info["address"]; ?>">
     <section class="persons" data-persons="<?php echo $info['contact_persons_id']; ?>">
@@ -41,8 +40,8 @@ if ($action == "register") {
         </ul>
       </div>
     </section>
-    <button>Save</button>
-    <a href="/">Back</a>
+    <button class="btn">Save</button>
+    <a class="btn" href="/">Back</a>
   </form>
 </section>
 </main>

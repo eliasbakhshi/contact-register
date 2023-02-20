@@ -112,8 +112,8 @@ const getCompaniesList = async (companyBox, search = "") => {
                                 Do you want to remove the company?
                                 </div>
                                 <div class="footer">
-                                  <button id="yes">yes</button>
-                                  <button id="no">no</button>
+                                  <button id="yes" class="btn">yes</button>
+                                  <button id="no" class="btn">no</button>
                                 </div>
                               </div>`;
           let messageBtns = overlay.querySelectorAll("button");
@@ -201,8 +201,8 @@ const getPersonsList = async (personsBox, noIcons = false, search = "") => {
                                 Do you want to remove the person?
                                 </div>
                                 <div class="footer">
-                                  <button id="yes">yes</button>
-                                  <button id="no">no</button>
+                                  <button id="yes" class="btn">yes</button>
+                                  <button id="no" class="btn">no</button>
                                 </div>
                               </div>`;
             let messageBtns = overlay.querySelectorAll("button");

@@ -3,10 +3,10 @@ if (!defined('ALLOWED')) die('Permission denied');
 ?>
 
 <main id="startPage" class="container">
-  <section class="companies" size=5>
+  <section class="companies">
     <div class="head">
       <span>Companies</span>
-      <a href="/?page=company&action=register">New</a>
+      <a class="btn" href="/?page=company&action=register">New</a>
     </div>
     <div class="body">
     <input type="search" id="searchCompany" value="" placeholder="Search" />
@@ -18,7 +18,7 @@ if (!defined('ALLOWED')) die('Permission denied');
   <section class="persons">
     <div class="head">
       <span>Persons</span>
-      <a href="/?page=person&action=register">New</a>
+      <a class="btn" href="/?page=person&action=register">New</a>
     </div>
     <div class="body">
     <input type="search" id="searchPerson" value="" placeholder="Search" />
