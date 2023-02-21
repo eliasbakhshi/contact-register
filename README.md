@@ -2,11 +2,12 @@
 This project this based on PHP 8.2, MySQL 5.2 and Node 18.2 or higher.
 
 **setup**
-1. Install the dependencies by running
+1. Install the dependencies by running.
 ```
 npm install
 ```
-2. Running, watching or build the application
+2. Import the database that you can find in the DB folder.
+3. Running, watching or build the application.
 ```
 npm run dev
 ```
@@ -23,8 +24,8 @@ a simple contact register where you can add companies with company name and addr
 Each contact person must be able to be linked to a company.
 
 You do not need to be logged in to access or edit the contact register (for convenience).
-We suggest that the contact register consists of three pages and a simple search function or separated for each part
-1. Start page: List of companies and contact persons
+We suggest that the contact register consists of three pages and a simple search function or separated for each part.
+1. Start page: List of companies and contact persons.
 2. Create/edit/delete companies.
 3. Create/edit/delete contact person.
 4. Search for company and/or contact person.
